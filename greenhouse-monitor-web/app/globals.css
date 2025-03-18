@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: black;
+  color: hsl(120, 100%, 50%);
+  font-family: "Consolas", monospace;
+}
+
