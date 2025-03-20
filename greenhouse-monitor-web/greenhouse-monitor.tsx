@@ -58,7 +58,7 @@ const GreenhouseMonitor: React.FC = () => {
         setSensorData((prevData) => ({ ...prevData, ...data }))
 
         if (typeof data.humedad === "number") {
-          setHumidityHistory((prev) => [...prev.slice(-TIEMPO_MAX + 1), data.humedad])
+          setHumidityHistory((prev) => [...prev.slice(-TIEMPO_MAX + 1), data.humedad as number])
           setTimeHistory((prev) => [...prev.slice(-TIEMPO_MAX + 1), prev.length])
         }
       } catch (error) {

@@ -1,4 +1,3 @@
-import type React from "react"
 import "./globals.css"
 import type { Metadata } from "next"
 
@@ -14,8 +13,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
+      <head>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Consolas:wght@400;700&display=swap" />
+      </head>
       <body>{children}</body>
     </html>
   )
 }
-

@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import mqtt from "mqtt"
 import { Line } from "react-chartjs-2"
 import {
@@ -20,7 +20,6 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, T
 const MQTT_BROKER = "wss://broker.hivemq.com:8884/mqtt"
 const MQTT_TOPIC = "sensor/humedad"
 const TIEMPO_MAX = 30
-const PH_OPTIMO: [number, number] = [5.5, 6.5]
 const HUMEDAD_OPTIMA: [number, number] = [20, 60]
 
 interface SensorData {
@@ -28,8 +27,6 @@ interface SensorData {
   humedad?: number
   co2?: number
   voc?: number
-  bateria?: number
-  ph?: number
   turbidez?: number
   calidad_agua?: string
 }
@@ -54,7 +51,7 @@ export default function GreenhouseMonitor() {
         setSensorData((prev) => ({ ...prev, ...data }))
 
         if (typeof data.humedad === "number") {
-          setHumidityHistory((prev) => [...prev.slice(-TIEMPO_MAX + 1), data.humedad])
+          setHumidityHistory((prev) => [...prev.slice(-TIEMPO_MAX + 1), data.humedad as number])
           setTimeHistory((prev) => [...prev.slice(-TIEMPO_MAX + 1), prev.length])
         }
       } catch (error) {
@@ -74,8 +71,12 @@ export default function GreenhouseMonitor() {
         label: "Humedad del Suelo",
         data: humidityHistory,
         borderColor: "#00FF00",
-        backgroundColor: "rgba(0, 255, 0, 0.1)",
-        tension: 0.1,
+        backgroundColor: "rgba(0, 255, 0, 0.2)",
+        tension: 0.3,
+        borderWidth: 2,
+        pointRadius: 4,
+        pointBackgroundColor: "#00FF00",
+        fill: true,
       },
     ],
   }
@@ -88,63 +89,77 @@ export default function GreenhouseMonitor() {
         min: 0,
         max: 100,
         grid: {
-          color: "#555555",
+          color: "#333333",
         },
         ticks: {
-          color: "#FFFFFF",
+          color: "#00FF00",
         },
       },
       x: {
         grid: {
-          color: "#555555",
+          color: "#333333",
         },
         ticks: {
-          color: "#FFFFFF",
+          color: "#00FF00",
         },
       },
     },
     plugins: {
       legend: {
         labels: {
-          color: "#FFFFFF",
+          color: "#00FF00",
         },
       },
     },
   }
-
-  const getValueColor = (value: number, [min, max]: number[]) =>
-    value >= min && value <= max ? "text-green-500" : "text-red-500"
-
+  
   return (
-    <div className="min-h-screen bg-black p-8">
-      <h1 className="text-3xl font-mono text-green-500 mb-8">Monitor de Sensores del Invernadero</h1>
+    <div style={{ backgroundColor: "black", color: "#00FF00", minHeight: "100vh", padding: "1rem" }}>
+      <h1 style={{ fontSize: "1.875rem", marginBottom: "1.5rem" }}>Monitor de Sensores del Invernadero</h1>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="space-y-4">
-          <h2 className="text-xl font-mono text-green-500 mb-4">Sensor Readings</h2>
-          <div className="space-y-2 font-mono">
-            <p className="text-green-500">Temperatura: {sensorData.temperatura ?? "--"} °C</p>
-            <p className="text-green-500">Humedad Aire: {sensorData.humedad ?? "--"}%</p>
-            <p className="text-green-500">CO₂: {sensorData.co2 ?? "--"} ppm</p>
-            <p className="text-green-500">VOC: {sensorData.voc ?? "--"}</p>
-            <p className="text-green-500">Batería: {sensorData.bateria ?? "--"} V</p>
-            <p className={getValueColor(sensorData.humedad ?? 0, HUMEDAD_OPTIMA)}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "1rem" }}>
+        <div>
+          <h2 style={{ fontSize: "1.25rem", marginBottom: "1rem" }}>Lecturas de Sensores</h2>
+          <div style={{ backgroundColor: "#0F1A2A", padding: "1rem", borderRadius: "0.25rem", border: "1px solid #00FF00" }}>
+            <p style={{ marginBottom: "0.5rem" }}>Temperatura: {sensorData.temperatura ?? "--"} °C</p>
+            <p style={{ marginBottom: "0.5rem" }}>Humedad Aire: {sensorData.humedad ?? "--"}%</p>
+            <p style={{ marginBottom: "0.5rem" }}>CO₂: {sensorData.co2 ?? "--"} ppm</p>
+            <p style={{ marginBottom: "0.5rem" }}>VOC: {sensorData.voc ?? "--"}</p>
+            <p style={{ marginBottom: "0.5rem", color: (sensorData.humedad ?? 0) >= HUMEDAD_OPTIMA[0] && (sensorData.humedad ?? 0) <= HUMEDAD_OPTIMA[1] ? "#00FF00" : "#FF0000" }}>
               Humedad Suelo: {sensorData.humedad ?? "--"}%
             </p>
-            <p className={getValueColor(sensorData.ph ?? 0, PH_OPTIMO)}>pH: {sensorData.ph ?? "--"}</p>
-            <p className="text-green-500">Turbidez: {sensorData.turbidez ?? "--"} NTU</p>
-            <p className="text-green-500">Calidad del Agua: {sensorData.calidad_agua ?? "--"}</p>
+            <p style={{ marginBottom: "0.5rem" }}>Turbidez: {sensorData.turbidez ?? "--"} NTU</p>
+            <p>Calidad del Agua: {sensorData.calidad_agua ?? "--"}</p>
           </div>
         </div>
 
-        <div className="h-[400px]">
-          <h2 className="text-xl font-mono text-green-500 mb-4">Soil Humidity Chart</h2>
-          <Line data={chartData} options={chartOptions} />
+        <div>
+          <h2 style={{ fontSize: "1.25rem", marginBottom: "1rem" }}>Humedad del Suelo</h2>
+          <div style={{ backgroundColor: "#0F1A2A", padding: "1rem", borderRadius: "0.25rem", border: "1px solid #00FF00" }}>
+            <div style={{ height: "350px", marginBottom: "1rem" }}>
+              <Line data={chartData} options={chartOptions} />
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <div style={{ textAlign: "center" }}>
+                <p style={{ fontSize: "0.75rem", color: "#9ca3af" }}>Mínimo Óptimo</p>
+                <p style={{ fontSize: "1.125rem", color: "#00FF00" }}>{HUMEDAD_OPTIMA[0]}%</p>
+              </div>
+              <div style={{ textAlign: "center" }}>
+                <p style={{ fontSize: "0.75rem", color: "#9ca3af" }}>Actual</p>
+                <p style={{ fontSize: "1.5rem", fontWeight: "bold", color: "#00FF00" }}>{sensorData.humedad?.toFixed(1) ?? "--"}%</p>
+              </div>
+              <div style={{ textAlign: "center" }}>
+                <p style={{ fontSize: "0.75rem", color: "#9ca3af" }}>Máximo Óptimo</p>
+                <p style={{ fontSize: "1.125rem", color: "#00FF00" }}>{HUMEDAD_OPTIMA[1]}%</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 bg-gray-900 text-green-500 p-2 font-mono">Status: {status}</div>
+      <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, backgroundColor: "#0F1A2A", color: "#00FF00", padding: "0.5rem" }}>
+        Status: {status}
+      </div>
     </div>
   )
 }
-
