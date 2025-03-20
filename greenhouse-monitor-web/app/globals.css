@@ -2,10 +2,125 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Consolas', monospace;
-  background-color: black;
-  color: #00FF00;
+:root {
+  --foreground-rgb: 0, 255, 0;
+  --background-rgb: 0, 0, 0;
 }
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background-color: rgb(var(--background-rgb));
+  font-family: "Consolas", monospace;
+}
+
+/* Animaciones */
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Estilos para colores */
+.text-green-500 {
+  color: #00ff00 !important;
+}
+
+.text-red-500 {
+  color: #ff0000 !important;
+}
+
+.bg-green-500 {
+  background-color: #00ff00 !important;
+}
+
+.bg-red-500 {
+  background-color: #ff0000 !important;
+}
+
+.bg-green-500\/20 {
+  background-color: rgba(0, 255, 0, 0.2) !important;
+}
+
+.bg-red-500\/20 {
+  background-color: rgba(255, 0, 0, 0.2) !important;
+}
+
+.border-green-500 {
+  border-color: #00ff00 !important;
+}
+
+.border-green-500\/30 {
+  border-color: rgba(0, 255, 0, 0.3) !important;
+}
+
+.border-red-500 {
+  border-color: #ff0000 !important;
+}
+
+.bg-gray-900 {
+  background-color: #111827 !important;
+}
+
+.bg-gray-800 {
+  background-color: #1f2937 !important;
+}
+
+.text-gray-400 {
+  color: #9ca3af !important;
+}
+
+.text-orange-400 {
+  color: #fb923c !important;
+}
+
+.bg-orange-400 {
+  background-color: #fb923c !important;
+}
+
+.text-blue-400 {
+  color: #60a5fa !important;
+}
+
+.bg-blue-400 {
+  background-color: #60a5fa !important;
+}
+
+.text-purple-400 {
+  color: #c084fc !important;
+}
+
+.bg-purple-400 {
+  background-color: #c084fc !important;
+}
+
+.text-yellow-500 {
+  color: #eab308 !important;
+}
+
+.bg-yellow-500 {
+  background-color: #eab308 !important;
+}
+
+/* Transiciones */
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.duration-500 {
+  transition-duration: 500ms;
+}
+
+/* Estilos para el gráfico */
+canvas {
+  border-radius: 0.25rem;
+}
+
