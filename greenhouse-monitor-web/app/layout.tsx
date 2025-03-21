@@ -3,9 +3,9 @@ import "./globals.css"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Greenhouse Monitor",
-  description: "Monitor de Sensores del Invernadero",
-  generator: "CLX",
+  title: "GreenSense | Monitor Inteligente de Invernadero",
+  description: "Monitoreo en tiempo real de sensores para invernadero con MKR IoT Carrier",
+  generator: "Next.js",
 }
 
 export default function RootLayout({
@@ -16,19 +16,13 @@ export default function RootLayout({
   return (
     <html lang="es">
       <head>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Consolas:wght@400;700&display=swap" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
       <body>{children}</body>
     </html>
   )
 }
-
-import "./globals.css"
-
-import "./globals.css"
-
-import "./globals.css"
 
 
 
