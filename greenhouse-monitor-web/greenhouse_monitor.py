@@ -26,7 +26,7 @@ plt.rcParams.update({
 # 📡 Configuración MQTT
 MQTT_BROKER = "broker.hivemq.com"
 MQTT_PORT = 1883
-MQTT_TOPIC = "sensor/humedad"
+MQTT_TOPIC = "greenhouse/sensors"
 
 # 📊 Parámetros óptimos para el invernadero
 TIEMPO_MAX = 30  # Máximo de puntos en el gráfico

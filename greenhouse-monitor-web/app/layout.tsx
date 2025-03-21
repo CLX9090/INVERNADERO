@@ -5,7 +5,7 @@ import type { Metadata } from "next"
 export const metadata: Metadata = {
   title: "Greenhouse Monitor",
   description: "Monitor de Sensores del Invernadero",
-    generator: 'v0.dev'
+  generator: "v0.dev",
 }
 
 export default function RootLayout({
@@ -23,6 +23,12 @@ export default function RootLayout({
     </html>
   )
 }
+
+import "./globals.css"
+
+import "./globals.css"
+
+import "./globals.css"
 
 
 
