@@ -5,7 +5,7 @@ import type { Metadata } from "next"
 export const metadata: Metadata = {
   title: "Greenhouse Monitor",
   description: "Monitor de Sensores del Invernadero",
-  generator: "v0.dev",
+  generator: "CLX",
 }
 
 export default function RootLayout({
